@@ -141,9 +141,13 @@ export default {
 
         if (response.status === 201) {
           localStorage.removeItem('cart');
+          window.alert('Payment successful!');
         }
+        this.loadCart();
+        this.$router.push('/');
       } catch (err) {
-        console.log(err)
+        console.log(err);
+        window.alert('We could not complete this transaction at this time');
         this.loading = false;
       }
     },

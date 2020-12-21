@@ -6,7 +6,7 @@ export const createOrder = async (data) => {
     method: 'post',
     data,
     headers: {
-      "Content-Type": "application/json"
+      "Referrer-Policy": "no-referrer"
     }
   });
 
