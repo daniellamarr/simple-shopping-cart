@@ -113,25 +113,38 @@ export default {
       this.loadCart();
     },
     async makePayment() {
-      if (!this.name || !this.email || !this.phone) {
-        this.error = 'please fill in all input fields';
-        return false;
-      }
-      this.loading = true;
-      this.error = '';
+      try {
+        if (!this.name || !this.email || !this.phone) {
+          this.error = 'please fill in all input fields';
+          return false;
+        }
+        this.loading = true;
+        this.error = '';
 
-      const response = await createOrder({
-        name: this.name,
-        email: this.email,
-        phone: this.phone,
-        price: this.totalPrice,
-      });
+        const paymentProducts = this.cart.map(item => {
+          return {
+            quantity: item.quantity,
+            id: item.id
+          }
+        })
 
-      console.log(response);
-      this.loading = false;
+        const response = await createOrder({
+          name: this.name,
+          email: this.email,
+          phone: this.phone,
+          price: this.totalPrice,
+          products: paymentProducts
+        });
 
-      if (response.status === 201) {
-        localStorage.removeItem('cart');
+        console.log(response);
+        this.loading = false;
+
+        if (response.status === 201) {
+          localStorage.removeItem('cart');
+        }
+      } catch (err) {
+        console.log(err)
+        this.loading = false;
       }
     },
     updateQuantity(product, e) {

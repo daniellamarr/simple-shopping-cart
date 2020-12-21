@@ -139,7 +139,7 @@ export default {
         margin-top: 30px;
         padding-bottom: 200px;
         display: grid;
-        grid-row-gap: 50px;
+        grid-row-gap: 400px;
         grid-auto-rows: 50px;
         grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
         column-gap: 50px;
