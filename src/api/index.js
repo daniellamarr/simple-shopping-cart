@@ -12,7 +12,7 @@ import {create} from 'axios';
 
 const apollo11ServiceClient = async (requestConfig) =>
   create({
-    baseURL: 'http://localhost:8003/',
+    baseURL: 'https://simple-shopping-cart-backend.herokuapp.com/',
     timeout: 150000,
     headers: {
       'Content-Type': 'application/json',
