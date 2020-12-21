@@ -1,0 +1,19 @@
+{
+    "name": "daniellamarr/apollo-api",
+    "description": "Apollo Api",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Daniel Lamarr",
+            "email": "danielchidiebele@gmail.com"
+        }
+    ],
+    "require": {
+        "vlucas/phpdotenv": "^2.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "ApolloApi\\": "app/"
+        }
+    }
+}
