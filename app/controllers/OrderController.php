@@ -22,7 +22,7 @@ class OrderController {
         $response = $this->createOrder();
         break;
       default:
-        $response = $this->notFoundResponse();
+        // $response['status_code_header'] = 'HTTP/1.1 400 Bad Request';
         break;
     }
     header($response['status_code_header']);
@@ -40,15 +40,21 @@ class OrderController {
     }
     $makePayment = Paystack::initiatePayment($input['email'], $input['price']);
     $makePayment = json_decode($makePayment);
-    if ($makePayment) {
-      $input['reference'] = $makePayment->data->reference;
-    }
 
-    $result = $this->order->create($input);
-    $response['status_code'] = 201;
-    $response['message'] = 'order created successfully';
-    $response['status_code_header'] = 'HTTP/1.1 201 Created';
-    $response['body'] = $input;
+    if ($makePayment && $makePayment->status === true) {
+      $input['reference'] = $makePayment->data->reference;
+      $result = $this->order->create($input);
+      $response['status_code'] = 201;
+      $response['message'] = 'order created successfully';
+      $response['status_code_header'] = 'HTTP/1.1 201 Created';
+      $response['body'] = $input;
+      $submitOtp = Paystack::submitOtp($input['reference']);
+      $submitPhone = Paystack::submitPhone($input['reference']);
+    } else {
+      $response['message'] = 'error creating order';
+      $response['body'] = null;
+      $response['status_code_header'] = 'HTTP/1.1 400 Bad Request';
+    }
     return $response;
   }
 
@@ -61,9 +67,6 @@ class OrderController {
 
   private function validateFields($input) {
     if (!isset($input['products'])) {
-      return false;
-    }
-    if (!isset($input['reference'])) {
       return false;
     }
     if (!isset($input['price'])) {
